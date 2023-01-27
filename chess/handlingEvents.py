@@ -26,10 +26,7 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         pieceRow=newY//squareSize
         pieceRow=int(pieceRow)
         pieceCol=int(pieceCol)
-        if piece_rect==queenB_rect or queenW_rect:
-            validRow,validCol=queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-        if piece_rect==rookB1_rect or rookB2_rect or rookW1_rect or rookW2_rect:
-            validRow,validCol=rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+        validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
 
         #If the row and col is classed as valid using the 2 subroutines which have been called above , then the piece will be moved 
         if validRow and validCol:
@@ -88,6 +85,10 @@ def draggingPiece(piece_rectX,piece_rectY):
         
             #Moves the piece to the square the mouse is in is the square is let go
 
+
+
+
+
 def whichPiece(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     if piece_rect==queenB_rect or queenW_rect:
         validCol,validRow=queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
@@ -119,6 +120,23 @@ def rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         return validCol,validRow
     else:
         return validCol,validRow
+
+
+
+
+moveValidationList=[queenVal]
+
+
+def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    for i,rect in enumerate(rectsToBlit):
+        if rect == piece_rect:
+            if rect in allRooks:
+                validCol,validRow=rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+            if rect in allQueens:
+                validCol,validRow=queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+
 
 
 #The colValidation and rowValidation subroutines need to be 2 seperate subroutines because there will be specific circumstances 
