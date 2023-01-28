@@ -68,50 +68,56 @@ pawnB1=pygame.transform.scale(pawnB1,(100,100))
 pawnB1_rect=pawnB1.get_rect()
 pawnB1_rect.centerx=50
 pawnB1_rect.centery=150
-pawnMoves=[1,0,2,0]
+pawnb1Count=0
 
 pawnB2=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB2=pygame.transform.scale(pawnB2,(100,100))
 pawnB2_rect=pawnB2.get_rect()
 pawnB2_rect.centerx=150
 pawnB2_rect.centery=150
+pawnb2Count=0
 
 pawnB3=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB3=pygame.transform.scale(pawnB3,(100,100))
 pawnB3_rect=pawnB1.get_rect()
 pawnB3_rect.centerx=250
 pawnB3_rect.centery=150
+pawnb3Count=0
 
 pawnB4=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB4=pygame.transform.scale(pawnB4,(100,100))
 pawnB4_rect=pawnB4.get_rect()
 pawnB4_rect.centerx=350
 pawnB4_rect.centery=150
+pawnb4Count=0
 
 pawnB5=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB5=pygame.transform.scale(pawnB5,(100,100))
 pawnB5_rect=pawnB5.get_rect()
 pawnB5_rect.centerx=450
 pawnB5_rect.centery=150
+pawnb5Count=0
 
 pawnB6=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB6=pygame.transform.scale(pawnB6,(100,100))
 pawnB6_rect=pawnB1.get_rect()
 pawnB6_rect.centerx=550
 pawnB6_rect.centery=150
+pawnb6Count=0
 
 pawnB7=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB7=pygame.transform.scale(pawnB7,(100,100))
 pawnB7_rect=pawnB1.get_rect()
 pawnB7_rect.centerx=650
 pawnB7_rect.centery=150
+pawnb7Count=0
 
 pawnB8=pygame.image.load("./Pieces/black pawn.png").convert_alpha()
 pawnB8=pygame.transform.scale(pawnB8,(100,100))
 pawnB8_rect=pawnB1.get_rect()
 pawnB8_rect.centerx=750
 pawnB8_rect.centery=150
-
+pawnb8Count=0
 
 rookW1=pygame.image.load("./Pieces/white rook.png").convert_alpha()
 rookW1=pygame.transform.scale(rookW1,(100,100))
@@ -167,49 +173,56 @@ pawnW1=pygame.transform.scale(pawnW1,(100,100))
 pawnW1_rect=pawnW1.get_rect()
 pawnW1_rect.centerx=50
 pawnW1_rect.centery=650
+pawnW1Count=0
 
 pawnW2=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW2=pygame.transform.scale(pawnW2,(100,100))
 pawnW2_rect=pawnW2.get_rect()
 pawnW2_rect.centerx=150
 pawnW2_rect.centery=650
+pawnW2Count=0
 
 pawnW3=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW3=pygame.transform.scale(pawnW3,(100,100))
 pawnW3_rect=pawnW3.get_rect()
 pawnW3_rect.centerx=250
 pawnW3_rect.centery=650
+pawnW3Count=0
 
 pawnW4=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW4=pygame.transform.scale(pawnW4,(100,100))
 pawnW4_rect=pawnW4.get_rect()
 pawnW4_rect.centerx=350
 pawnW4_rect.centery=650
+pawnW4Count=0
 
 pawnW5=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW5=pygame.transform.scale(pawnW5,(100,100))
 pawnW5_rect=pawnW5.get_rect()
 pawnW5_rect.centerx=450
 pawnW5_rect.centery=650
+pawnW5Count=0
 
 pawnW6=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW6=pygame.transform.scale(pawnW6,(100,100))
 pawnW6_rect=pawnW6.get_rect()
 pawnW6_rect.centerx=550
 pawnW6_rect.centery=650
+pawnW6Count=0
 
 pawnW7=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW7=pygame.transform.scale(pawnW7,(100,100))
 pawnW7_rect=pawnW1.get_rect()
 pawnW7_rect.centerx=650
 pawnW7_rect.centery=650
+pawnW7Count=0
 
 pawnW8=pygame.image.load("./Pieces/white pawn.png").convert_alpha()
 pawnW8=pygame.transform.scale(pawnW8,(100,100))
 pawnW8_rect=pawnW1.get_rect()
 pawnW8_rect.centerx=750
 pawnW8_rect.centery=650
-
+pawnW8Count=0
 #All of the variables of all the pieces that will be used to blit the pieces on the screen
 piecesToBlit=[rookB1,knightB1,bishopB1,queenB,kingB,bishopB2,knightB2,rookB2,
               pawnB1,pawnB2,pawnB3,pawnB4,pawnB5,pawnB6,pawnB7,pawnB8,
@@ -227,5 +240,13 @@ compRepOfPieces=['bR','bN','bB','bQ','bK','bB2','bN2','bR2',
                  'wr','wn','wb','wq','wk','wb2','wn2','wr2',
                  'wp1','wp2','wp3','wp4','wp5','wp6','wp7','wp8']
 
+
 allRooks=[rookB1_rect,rookB2_rect,rookW1_rect,rookW2_rect]
-allQueens=[queenB_rect,queenB_rect]
+allQueens=[queenB_rect,queenW_rect]
+allBishops=[bishopB1_rect,bishopB2_rect,bishopW1_rect,bishopW2_rect]
+allKnights=[knightB1_rect,knightB2_rect,knightW1_rect,knightW2_rect]
+allPawns=[pawnB1_rect,pawnB2_rect,pawnB3_rect,pawnB4_rect,pawnB5_rect,pawnB6_rect,pawnB7_rect,pawnB8_rect,
+         pawnW1_rect,pawnW2_rect,pawnW3_rect,pawnW4_rect,pawnW5_rect,pawnW6_rect,pawnW7_rect,pawnW8_rect]
+
+pawnMoveCounter=[pawnb1Count,pawnb2Count,pawnb3Count,pawnb4Count,pawnb5Count,pawnb6Count,pawnb7Count,pawnb8Count,
+                 pawnW1Count,pawnW2Count,pawnW3Count,pawnW4Count,pawnW5Count,pawnW6Count,pawnW7Count,pawnW8Count]

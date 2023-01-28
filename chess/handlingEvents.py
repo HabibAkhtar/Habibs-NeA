@@ -16,9 +16,6 @@ def clickPiece(piece_rect):
         
 def dropPiece(piecerepresentation,piece_rect,startX,startY):
     if movement[0]==1:
-        sound = pygame.mixer.Sound("./Pieces/pieceDown.wav")
-        sound.set_volume(0.2)
-        sound.play()
         ogPieceCol=startX//squareSize
         ogPieceRow=startY//squareSize
         newX,newY=pygame.mouse.get_pos()
@@ -26,10 +23,14 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         pieceRow=newY//squareSize
         pieceRow=int(pieceRow)
         pieceCol=int(pieceCol)
+        #This subroutine below will see what piece is being selected and then call the correct subroutine
+        #This is to check if the move that is trying to be made is valid or not 
         validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
 
-        #If the row and col is classed as valid using the 2 subroutines which have been called above , then the piece will be moved 
         if validRow and validCol:
+            sound = pygame.mixer.Sound("./Pieces/pieceDown.wav")
+            sound.set_volume(0.2)
+            sound.play()
             piece_rect.y=squareSize*pieceRow
             piece_rect.x=squareSize*pieceCol
             #Pinning the piece to a square 
@@ -87,100 +88,104 @@ def draggingPiece(piece_rectX,piece_rectY):
 
 
 
-
-
-def whichPiece(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    if piece_rect==queenB_rect or queenW_rect:
-        validCol,validRow=queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-    
-    if piece_rect==rookB1_rect or rookB2_rect or rookW1_rect or rookW2_rect:
-        validCol,validRow=rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-    return validCol,validRow
-
-
-def queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
-    if piece_rect==queenB_rect or piece_rect==queenW_rect:
+    if piece_rect in allQueens:
         if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol) or pieceRow== ogPieceRow or pieceCol== ogPieceCol:
             validCol=True
             validRow=True
         return validCol,validRow
-    else:
-        return validCol,validRow
 
-def rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+
+        
+def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
-    if piece_rect== rookB1_rect or piece_rect==rookB2_rect or piece_rect==rookW1_rect or piece_rect==rookW2_rect:
+    if piece_rect in allRooks:
         if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
         #The rook can move anywhere along the row its on , or anywhere along the column its on 
             validCol=True
             validRow=True
         return validCol,validRow
-    else:
+
+
+
+
+def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    validCol=False
+    validRow=False
+    if piece_rect in allBishops:
+        if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
+            validCol=True
+            validRow=True
         return validCol,validRow
 
 
+def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    validCol=False
+    validRow=False
+    if piece_rect in allPawns:
+        for x,i in enumerate(allPawns):
+            if i == piece_rect:
+                moveCounter=pawnMoveCounter[x]
+                if moveCounter==0:
+                    if ((pieceRow-ogPieceRow)==2 or (pieceRow-ogPieceRow)==1) and pieceCol==ogPieceCol:
+                        validCol=True
+                        validRow=True
+                else:
+                    if (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
+                        validCol=True
+                        validRow=True
+                        moveCounter+=1
+        return validCol,validRow
 
 
-moveValidationList=[queenVal]
+def knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    validCol=False
+    validRow=False
+    validMove=False
+    #All the possible conditions for the knight to move set validMove to true
+    #This code cant be grouped together e.g( pieceRow-ogPieceRow)==1 OR -1 as then it will create an infinite possible number of combinations and let the piece move without limitations
+    if (pieceRow-ogPieceRow)== 2 and (pieceCol-ogPieceCol)==1 :
+        validMove=True
+    if (pieceRow-ogPieceRow)==-2 and (pieceCol-ogPieceCol)==-1:
+        validMove=True
+    if (pieceRow-ogPieceRow)==-2 and (pieceCol-ogPieceCol)==1:
+        validMove=True
+    if (pieceRow-ogPieceRow)== 2 and (pieceCol-ogPieceCol)==-1:
+        validMove=True
+    if (pieceRow-ogPieceRow)==1  and (pieceCol- ogPieceCol)==2:
+        validMove=True
+    if (pieceRow-ogPieceRow)==-1  and (pieceCol- ogPieceCol)==-2:
+        validMove=True
+    if (pieceRow-ogPieceRow)==-1  and (pieceCol- ogPieceCol)==2:
+        validMove=True
+    if (pieceRow-ogPieceRow)==1  and (pieceCol- ogPieceCol)==-2:
+        validMove=True
 
+    if piece_rect in allKnights:
+        if validMove:
+            validCol=True
+            validRow=True
+        return validCol,validRow
 
 def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
             if rect in allRooks:
-                validCol,validRow=rookVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                validCol,validRow=rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allQueens:
-                validCol,validRow=queenVal(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+            if rect in allBishops:
+                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+            if rect in allPawns:
+                validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+            if rect in allKnights:
+                validCol,validRow=knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
 
-
-
-#The colValidation and rowValidation subroutines need to be 2 seperate subroutines because there will be specific circumstances 
-'''
-def colValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-
-    elif piece_rect==bishopB1_rect or piece_rect==bishopB2_rect or piece_rect==bishopW1_rect or piece_rect==bishopW2_rect:
-        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-        #This makes sure all the bishops can go as many spaces as possible diagonally 
-            validCol=True
-            return validCol
-
-
-
-
-
-
-def rowValidation(pieceRow,ogPieceRow,pieceCol,ogPieceCol,piece_rect):
-    validRow=False
-
-    if piece_rect==queenB_rect or piece_rect==queenW_rect:
-        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol) or pieceRow== ogPieceRow or pieceCol== ogPieceCol:
-            validRow=True
-
-        return validRow
-    
-    elif piece_rect== rookB1_rect or piece_rect==rookB2_rect or piece_rect==rookW1_rect or piece_rect==rookW2_rect:
-        if pieceRow== ogPieceRow or pieceCol== ogPieceCol:
-            validRow=True
-        return validRow
-
-    elif piece_rect==bishopB1_rect or piece_rect==bishopB2_rect or piece_rect==bishopW1_rect or piece_rect==bishopW2_rect:
-        if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validRow=True
-        return validRow
-            
-'''
-                    
-
-''' 
-The issue with the code above is that if the queen is in the starting pos of the rook , It cant go diagonally and if the queen is in the starting pos of the bishop ,
-it can only go diagonally 
-'''
-
-#Make an array with every function of the moveValidations e.g [rookVal,queenVal]
-#use a base validation function (like the rowVal function in speech marks above )
-#loop through the pieces to blit 
