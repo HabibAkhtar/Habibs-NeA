@@ -25,8 +25,11 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         pieceCol=int(pieceCol)
         #This subroutine below will see what piece is being selected and then call the correct subroutine
         #This is to check if the move that is trying to be made is valid or not 
-        validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-
+        validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
+        if not validRow or not validCol:
+            invalidMoveSound=pygame.mixer.Sound("./Pieces/invalidMove.wav")
+            invalidMoveSound.set_volume(0.2)
+            invalidMoveSound.play()
         if validRow and validCol:
             sound = pygame.mixer.Sound("./Pieces/pieceDown.wav")
             sound.set_volume(0.2)
@@ -122,22 +125,40 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         return validCol,validRow
 
 
-def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
     validCol=False
     validRow=False
+    validMove=False
     if piece_rect in allPawns:
-        for x,i in enumerate(allPawns):
-            if i == piece_rect:
-                moveCounter=pawnMoveCounter[x]
-                if moveCounter==0:
-                    if ((pieceRow-ogPieceRow)==2 or (pieceRow-ogPieceRow)==1) and pieceCol==ogPieceCol:
-                        validCol=True
-                        validRow=True
-                else:
-                    if (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
-                        validCol=True
-                        validRow=True
-                        moveCounter+=1
+        if 'b' in piecerepresentation:
+        #Condition above is checking if the piece is black
+            if ogPieceRow==1 :
+                if ((pieceRow-ogPieceRow)==2 and pieceCol==ogPieceCol) or (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
+                    validMove=True
+            elif ogPieceRow!=1:
+                if (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
+                    validMove=True
+            if (chessBoard[ogPieceRow+1][pieceCol-1]!=' ' or chessBoard[ogPieceRow+1][pieceCol+1]!=' ') :
+                if (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1 or -1 :
+                    if 'b' not in chessBoard[pieceRow][pieceCol]:
+                        validMove=True
+            if validMove:
+                validCol=True
+                validRow=True
+        elif 'w' in piecerepresentation:
+            if ogPieceRow==6:
+                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
+                    validMove=True
+            elif ogPieceRow!=6:
+                if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol:
+                    validMove=True
+            if (chessBoard[ogPieceRow-1][pieceCol-1]!=' ' or chessBoard[ogPieceRow-1][pieceCol+1]!=' ') :
+                    if (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1 or -1 :
+                        if 'w' not in chessBoard[pieceRow][pieceCol]:
+                            validMove=True
+            if validMove:
+                validCol=True
+                validRow=True
         return validCol,validRow
 
 
@@ -170,7 +191,7 @@ def knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validRow=True
         return validCol,validRow
 
-def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
             if rect in allRooks:
@@ -183,7 +204,7 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
                 validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allPawns:
-                validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
                 return validCol,validRow
             if rect in allKnights:
                 validCol,validRow=knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
