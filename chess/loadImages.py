@@ -240,7 +240,7 @@ compRepOfPieces=['bR','bN','bB','bQ','bK','bB2','bN2','bR2',
                  'wr','wn','wb','wq','wk','wb2','wn2','wr2',
                  'wp1','wp2','wp3','wp4','wp5','wp6','wp7','wp8']
 
-
+allKings=[kingB_rect,kingW_rect]
 allRooks=[rookB1_rect,rookB2_rect,rookW1_rect,rookW2_rect]
 allQueens=[queenB_rect,queenW_rect]
 allBishops=[bishopB1_rect,bishopB2_rect,bishopW1_rect,bishopW2_rect]

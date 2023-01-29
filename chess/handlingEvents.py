@@ -147,7 +147,7 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 validRow=True
         elif 'w' in piecerepresentation:
             if ogPieceRow==6:
-                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
+                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol):
                     validMove=True
             elif ogPieceRow!=6:
                 if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol:
@@ -191,7 +191,35 @@ def knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validRow=True
         return validCol,validRow
 
+
+def kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    validCol=False
+    validRow=False
+    validMove=False
+    if piece_rect in allKings:
+        if (pieceRow-ogPieceRow)==1  and (pieceCol==ogPieceCol):
+            validMove=True
+        elif (pieceRow-ogPieceRow)==-1  and (pieceCol==ogPieceCol):
+            validMove=True
+        elif (pieceRow==ogPieceRow) and (pieceCol-ogPieceCol)==1:
+            validMove=True
+        elif (pieceRow==ogPieceRow) and (pieceCol-ogPieceCol)==-1:
+            validMove=True
+        elif (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1:
+            validMove=True
+        elif (pieceRow-ogPieceRow)==-1 and (pieceCol-ogPieceCol)==-1:
+            validMove=True
+        elif (pieceRow-ogPieceRow)==-1 and (pieceCol-ogPieceCol)==1:
+            validMove=True
+        elif (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==-1:
+            validMove=True
+        if validMove:
+            validCol=True
+            validRow=True
+        return validCol,validRow
+
 def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
+    #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece 
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
             if rect in allRooks:
@@ -208,5 +236,8 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 return validCol,validRow
             if rect in allKnights:
                 validCol,validRow=knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                return validCol,validRow
+            if rect in allKings:
+                validCol,validRow=kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
 
