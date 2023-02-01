@@ -143,6 +143,7 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 if ((pieceRow-ogPieceRow)==1) and (pieceCol==ogPieceCol) and chessBoard[pieceRow][pieceCol]==' ' :
                         validMove=True
             if ogPieceCol==7:
+                #If the piece is in row 7 , then it is impossible for a piece to be to the right of it and so checking that position which doesnt exist will cause an error
                 if chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ':
                     if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
                         if 'b' not in chessBoard[pieceRow][pieceCol]:
@@ -167,6 +168,7 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol and (chessBoard[pieceRow][pieceCol]==' '):
                     validMove=True
             if ogPieceCol==7:
+                #If the piece is in row 7 , then it is impossible for a piece to be to the right of it and so checking that position which doesnt exist will cause an error
                 if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ':
                         if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
                             if 'w' not in chessBoard[pieceRow][pieceCol]:
