@@ -71,9 +71,9 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
                     for i,piece in enumerate(compRepOfPieces):
                         if piece == chessBoard[pieceRow][pieceCol]:
                 #These lines of code is repsonsible for killing the pieces if the pieces are taken 
-                            piecesToBlit.pop(i)
-                            rectsToBlit.pop(i)
-                            compRepOfPieces.pop(i)
+                            piecesToBlit.remove(i)
+                            rectsToBlit.remove(i)
+                            compRepOfPieces.remove(i)
                 chessBoard[pieceRow][pieceCol]=piecerepresentation
         #Making sure an error doesnt pop up if any part of the piece is off the screen(allows human error)
         movement[0]=0
@@ -133,29 +133,50 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
         if 'b' in piecerepresentation:
         #Condition above is checking if the piece is black
             if ogPieceRow==1 :
-                if ((pieceRow-ogPieceRow)==2 and pieceCol==ogPieceCol) or (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
-                    validMove=True
-            elif ogPieceRow!=1:
-                if (pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol:
-                    validMove=True
-            if (chessBoard[ogPieceRow+1][pieceCol-1]!=' ' or chessBoard[ogPieceRow+1][pieceCol+1]!=' ') :
-                if (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1 or -1 :
-                    if 'b' not in chessBoard[pieceRow][pieceCol]:
+                if ((pieceRow-ogPieceRow)==2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
                         validMove=True
+                elif chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow+1][ogPieceCol+1]!=' ':
+                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
+                            if 'b' not in chessBoard[pieceRow][pieceCol]:
+                                validMove=True
+            elif ogPieceRow!=1:
+                if ((pieceRow-ogPieceRow)==1) and (pieceCol==ogPieceCol) and chessBoard[pieceRow][pieceCol]==' ' :
+                        validMove=True
+            if ogPieceCol==7:
+                if chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ':
+                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
+                        if 'b' not in chessBoard[pieceRow][pieceCol]:
+                            validMove=True
+            else:
+                if chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow+1][ogPieceCol+1]!=' ':
+                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
+                        if 'b' not in chessBoard[pieceRow][pieceCol]:
+                            validMove=True
             if validMove:
                 validCol=True
                 validRow=True
         elif 'w' in piecerepresentation:
             if ogPieceRow==6:
-                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol):
+                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
                     validMove=True
-            elif ogPieceRow!=6:
-                if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol:
-                    validMove=True
-            if (chessBoard[ogPieceRow-1][pieceCol-1]!=' ' or chessBoard[ogPieceRow-1][pieceCol+1]!=' ') :
-                    if (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1 or -1 :
+                elif chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow-1][ogPieceCol+1]!=' ':
+                    if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
                         if 'w' not in chessBoard[pieceRow][pieceCol]:
                             validMove=True
+            elif ogPieceRow!=6:
+                if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol and (chessBoard[pieceRow][pieceCol]==' '):
+                    validMove=True
+            if ogPieceCol==7:
+                if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ':
+                        if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
+                            if 'w' not in chessBoard[pieceRow][pieceCol]:
+                                validMove=True
+            else:
+                if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow-1][ogPieceCol+1]!=' ':
+                    if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
+                        if 'w' not in chessBoard[pieceRow][pieceCol]:
+                            validMove=True
+            
             if validMove:
                 validCol=True
                 validRow=True
