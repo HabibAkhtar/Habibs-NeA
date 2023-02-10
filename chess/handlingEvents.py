@@ -132,6 +132,8 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
     if piece_rect in allPawns:
         if 'b' in piecerepresentation:
         #Condition above is checking if the piece is black
+            ogPieceRow=int(ogPieceRow)
+            ogPieceCol=int(ogPieceCol)
             if ogPieceRow==1 :
                 if ((pieceRow-ogPieceRow)==2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
                         validMove=True
@@ -157,6 +159,8 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 validCol=True
                 validRow=True
         elif 'w' in piecerepresentation:
+            ogPieceRow=int(ogPieceRow)
+            ogPieceCol=int(ogPieceCol)
             if ogPieceRow==6:
                 if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
                     validMove=True
@@ -174,6 +178,7 @@ def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                             if 'w' not in chessBoard[pieceRow][pieceCol]:
                                 validMove=True
             else:
+
                 if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow-1][ogPieceCol+1]!=' ':
                     if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
                         if 'w' not in chessBoard[pieceRow][pieceCol]:
@@ -263,4 +268,3 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
             if rect in allKings:
                 validCol,validRow=kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
-

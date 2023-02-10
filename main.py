@@ -34,16 +34,15 @@ while Running:
             for row in chessBoard:
                 print(row)
 
-        elif event.type == pygame.MOUSEMOTION:
+        #elif event.type == pygame.MOUSEMOTION:
             #The parameters given could be any of the rects of the pieces as it gets reassigned in the method 
-            draggingPiece(rookB1_rect.centerx,rookB1_rect.centery)
+        #    draggingPiece(rookB1_rect.centerx,rookB1_rect.centery)
    
 
     for i,j in enumerate(piecesToBlit):
         WINDOW.blit(j,rectsToBlit[i])
     pygame.display.flip()
     pygame.display.update()
-
  
 
 
