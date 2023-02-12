@@ -1,15 +1,18 @@
 
 {
     "git.enabled": false,
-    "workbench.colorTheme": "Default Dark+",
+    "workbench.colorTheme": "Matrix",
     "workbench.colorCustomizations": {
     "[Vincent van theme]": {"symbolIcon.variableForeground": "#000000"},
     "tab.activeBackground": "#6c2eff",
     "tab.hoverBackground": "#cfabff",
     "editor.background": "#242323",
-    "editor.foreground": "#27ffd4f9",
+    "editor.foreground": "#27ffcdf9",
     "sideBar.background": "#302926",
-    "terminal.foreground": "#1a2f00",
+    "terminal.foreground": "#12c282",
+    "editorCursor.foreground": "#ff0000",
+    
+
     
     }
 }

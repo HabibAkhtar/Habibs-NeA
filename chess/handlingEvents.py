@@ -8,11 +8,12 @@ from .computerRepresentation import *
 movement=[0]
 
 
-def clickPiece(piece_rect):
+def clickPiece(piece_rect,pieceX,pieceY):
     startX,startY=pygame.mouse.get_pos()
     if piece_rect.collidepoint(startX,startY):
         movement[0]=1
-    return startX,startY
+        pieceX,pieceY= startX,startY
+    return startX,startY,pieceX,pieceY
         
 def dropPiece(piecerepresentation,piece_rect,startX,startY):
     if movement[0]==1:
@@ -79,13 +80,8 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         movement[0]=0
     
             
-def draggingPiece(piece_rectX,piece_rectY):
-    newX,newY=pygame.mouse.get_pos()
-    piece_rectX=piece_rectX
-    piece_rectY=piece_rectY
-    #Reassigning the rects of the image given so that no matter what piece is clicked on it moves 
-    if movement[0]==1:
-        piece_rectX,piece_rectY= newX,newY
+        
+        
         
             #Moves the piece to the square the mouse is in is the square is let go
 
@@ -96,6 +92,7 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validRow=False
     if piece_rect in allQueens:
         if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol) or pieceRow== ogPieceRow or pieceCol== ogPieceCol:
+            
             validCol=True
             validRow=True
         return validCol,validRow
@@ -105,11 +102,23 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
 def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
+    validMove=True
     if piece_rect in allRooks:
         if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
-        #The rook can move anywhere along the row its on , or anywhere along the column its on 
-            validCol=True
-            validRow=True
+        #The rook can move anywhere along the row its on , or anywhere along the column its on
+            if pieceRow!= ogPieceRow:
+                #Pieces is moving up or down 
+                if pieceRow>ogPieceRow:
+                    #Pieces is moving down
+                    for i in range (pieceRow-1,ogPieceRow,-1):
+                        if chessBoard[i][pieceCol] != ' ':
+                            validMove= False
+
+
+            
+            if validMove:
+                validCol=True
+                validRow=True
         return validCol,validRow
 
 
@@ -250,6 +259,8 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
     #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece 
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
+            ogPieceRow=int(ogPieceRow)
+            ogPieceCol=int(ogPieceCol)
             if rect in allRooks:
                 validCol,validRow=rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
@@ -268,3 +279,4 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
             if rect in allKings:
                 validCol,validRow=kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
+

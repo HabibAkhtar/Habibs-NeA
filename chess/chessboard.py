@@ -42,5 +42,6 @@ def createChessboard(windowWidth, windowHeight, surface):
         if i % 2 == 1:
             createHorizontalRects(x, y, colour2,colour1)
             y += rectWidth
+    
 
 

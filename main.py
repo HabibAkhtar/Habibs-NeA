@@ -26,7 +26,7 @@ while Running:
                     piece_rect=j
                     pieceRep=compRepOfPieces[i]
                     
-            startX,startY=clickPiece(piece_rect)
+            startX,startY,pieceX,pieceY=clickPiece(piece_rect,rookB1_rect.centerx,rookB1_rect.centery)
             
 
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -34,9 +34,7 @@ while Running:
             for row in chessBoard:
                 print(row)
 
-        #elif event.type == pygame.MOUSEMOTION:
-            #The parameters given could be any of the rects of the pieces as it gets reassigned in the method 
-        #    draggingPiece(rookB1_rect.centerx,rookB1_rect.centery)
+
    
 
     for i,j in enumerate(piecesToBlit):
