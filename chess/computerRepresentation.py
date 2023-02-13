@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 pygame.init()
-squareSize=87.5
+squareSize=75
 chessBoard=[
     ["bR", "bN", "bB", "bQ", "bK", "bB2", "bN2", "bR2"],
     ["bP1", "bP2", "bP3", "bP4", "bP5", "bP6", "bP7", "bP8"],
