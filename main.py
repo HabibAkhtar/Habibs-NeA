@@ -26,7 +26,7 @@ while Running:
                     piece_rect=j
                     pieceRep=compRepOfPieces[i]
                     
-            startX,startY,pieceX,pieceY=clickPiece(piece_rect,rookB1_rect.centerx,rookB1_rect.centery)
+            startX,startY=clickPiece(piece_rect)
             
 
         elif event.type == pygame.MOUSEBUTTONUP:

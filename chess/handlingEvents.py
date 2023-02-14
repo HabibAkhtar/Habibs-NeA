@@ -2,18 +2,18 @@ import pygame
 from pygame.locals import *
 from .loadImages import *
 from .computerRepresentation import *
-
+from .moveRules import *
 #Due to a pygame bug this array below is used as a boolean variable , the first index represents a true/false variable 
 #If the first index is 1 that represents true whereas if it 0 that represents false 
 movement=[0]
 
 
-def clickPiece(piece_rect,pieceX,pieceY):
+def clickPiece(piece_rect):
     startX,startY=pygame.mouse.get_pos()
     if piece_rect.collidepoint(startX,startY):
         movement[0]=1
-        pieceX,pieceY= startX,startY
-    return startX,startY,pieceX,pieceY
+        
+    return startX,startY
         
 def dropPiece(piecerepresentation,piece_rect,startX,startY):
     if movement[0]==1:
@@ -76,6 +76,21 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
                             rectsToBlit.remove(i)
                             compRepOfPieces.remove(i)
                 chessBoard[pieceRow][pieceCol]=piecerepresentation
+            
+                for i,sublist in enumerate(chessBoard):
+            #The enumerate function adds an index value for every item in the list
+                    if piecerepresentation in sublist:
+                        chessBoard[i][sublist.index(piecerepresentation)]=' '
+
+                    chessBoard[pieceRow][pieceCol]=piecerepresentation
+                    for x in sublist:
+                        # without the 2 if statements below , if a piece is moved left in the same row , the computer will register the piece twice 
+                        if x == piecerepresentation:
+                            chessBoard[i][sublist.index(piecerepresentation)]=holder
+                            pieceCounter+=1
+                        if pieceCounter > 1:
+                            holder = ' '
+
         #Making sure an error doesnt pop up if any part of the piece is off the screen(allows human error)
         movement[0]=0
     
@@ -83,218 +98,7 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         
         
         
-            #Moves the piece to the square the mouse is in is the square is let go
-
-
-
-def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    validCol=False
-    validRow=False
-    if piece_rect in allQueens:
-        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol) or pieceRow== ogPieceRow or pieceCol== ogPieceCol:
             
-            validCol=True
-            validRow=True
-        return validCol,validRow
 
 
-        
-def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    validCol=False
-    validRow=False
-    validMove=True
-    if piece_rect in allRooks:
-        if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
-        #The rook can move anywhere along the row its on , or anywhere along the column its on
-        #The conditions below make sure the rook cant jump over other pieces 
-            if pieceRow!= ogPieceRow:
-                #Piece is moving up or down 
-                if pieceRow>ogPieceRow:
-                    #Piece is moving down
-                    for i in range (pieceRow-1,ogPieceRow,-1):
-                        if chessBoard[i][pieceCol] != ' ':
-                            validMove= False
-                elif ogPieceRow>pieceRow:
-                    #Piece is moving up
-                    for x in range (pieceRow+1,ogPieceRow):
-                        if chessBoard[x][pieceCol]!= ' ':
-                            validMove=False
-            elif pieceCol != ogPieceCol:
-                #Piece is moving sideways 
-                if pieceCol>ogPieceCol:
-                    #Piece is moving right
-                    for y in range (pieceCol-1,ogPieceCol,-1):
-                        if chessBoard[pieceRow][y] !=' ':
-                            validMove=False
-                elif ogPieceCol>pieceCol:
-                    for z in range (pieceCol+1,ogPieceCol):
-                        if chessBoard[pieceRow][z] != ' ':
-                            validMove=False
-
-
-            
-            if validMove and chessBoard[pieceRow][pieceCol][0]!=chessBoard[ogPieceRow][ogPieceCol][0]:
-                #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
-                validCol=True
-                validRow=True
-        return validCol,validRow
-
-
-
-
-def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    validCol=False
-    validRow=False
-    if piece_rect in allBishops:
-        if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validCol=True
-            validRow=True
-        return validCol,validRow
-
-
-def pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
-    validCol=False
-    validRow=False
-    validMove=False
-    if piece_rect in allPawns:
-        if 'b' in piecerepresentation:
-        #Condition above is checking if the piece is black
-            ogPieceRow=int(ogPieceRow)
-            ogPieceCol=int(ogPieceCol)
-            if ogPieceRow==1 :
-                if ((pieceRow-ogPieceRow)==2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
-                        validMove=True
-                elif chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow+1][ogPieceCol+1]!=' ':
-                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                            if 'b' not in chessBoard[pieceRow][pieceCol]:
-                                validMove=True
-            elif ogPieceRow!=1:
-                if ((pieceRow-ogPieceRow)==1) and (pieceCol==ogPieceCol) and chessBoard[pieceRow][pieceCol]==' ' :
-                        validMove=True
-            if ogPieceCol==7:
-                #If the piece is in row 7 , then it is impossible for a piece to be to the right of it and so checking that position which doesnt exist will cause an error
-                if chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ':
-                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                        if 'b' not in chessBoard[pieceRow][pieceCol]:
-                            validMove=True
-            else:
-                if chessBoard[ogPieceRow+1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow+1][ogPieceCol+1]!=' ':
-                    if (pieceRow-ogPieceRow)==1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                        if 'b' not in chessBoard[pieceRow][pieceCol]:
-                            validMove=True
-            if validMove:
-                validCol=True
-                validRow=True
-        elif 'w' in piecerepresentation:
-            ogPieceRow=int(ogPieceRow)
-            ogPieceCol=int(ogPieceCol)
-            if ogPieceRow==6:
-                if ((pieceRow-ogPieceRow)==-2 and pieceCol==ogPieceCol) or ((pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol) and (chessBoard[pieceRow][pieceCol]==' '):
-                    validMove=True
-                elif chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow-1][ogPieceCol+1]!=' ':
-                    if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                        if 'w' not in chessBoard[pieceRow][pieceCol]:
-                            validMove=True
-            elif ogPieceRow!=6:
-                if(pieceRow-ogPieceRow)==-1 and pieceCol==ogPieceCol and (chessBoard[pieceRow][pieceCol]==' '):
-                    validMove=True
-            if ogPieceCol==7:
-                #If the piece is in row 7 , then it is impossible for a piece to be to the right of it and so checking that position which doesnt exist will cause an error
-                if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ':
-                        if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                            if 'w' not in chessBoard[pieceRow][pieceCol]:
-                                validMove=True
-            else:
-
-                if chessBoard[ogPieceRow-1][ogPieceCol-1]!=' ' or chessBoard[ogPieceRow-1][ogPieceCol+1]!=' ':
-                    if (pieceRow-ogPieceRow)==-1 and ((pieceCol-ogPieceCol)==1 or (pieceCol-ogPieceCol)==-1):
-                        if 'w' not in chessBoard[pieceRow][pieceCol]:
-                            validMove=True
-            
-            if validMove:
-                validCol=True
-                validRow=True
-        return validCol,validRow
-
-
-def knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    validCol=False
-    validRow=False
-    validMove=False
-    #All the possible conditions for the knight to move set validMove to true
-    #This code cant be grouped together e.g( pieceRow-ogPieceRow)==1 OR -1 as then it will create an infinite possible number of combinations and let the piece move without limitations
-    if (pieceRow-ogPieceRow)== 2 and (pieceCol-ogPieceCol)==1 :
-        validMove=True
-    if (pieceRow-ogPieceRow)==-2 and (pieceCol-ogPieceCol)==-1:
-        validMove=True
-    if (pieceRow-ogPieceRow)==-2 and (pieceCol-ogPieceCol)==1:
-        validMove=True
-    if (pieceRow-ogPieceRow)== 2 and (pieceCol-ogPieceCol)==-1:
-        validMove=True
-    if (pieceRow-ogPieceRow)==1  and (pieceCol- ogPieceCol)==2:
-        validMove=True
-    if (pieceRow-ogPieceRow)==-1  and (pieceCol- ogPieceCol)==-2:
-        validMove=True
-    if (pieceRow-ogPieceRow)==-1  and (pieceCol- ogPieceCol)==2:
-        validMove=True
-    if (pieceRow-ogPieceRow)==1  and (pieceCol- ogPieceCol)==-2:
-        validMove=True
-
-    if piece_rect in allKnights:
-        if validMove:
-            validCol=True
-            validRow=True
-        return validCol,validRow
-
-
-def kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    validCol=False
-    validRow=False
-    validMove=False
-    if piece_rect in allKings:
-        if (pieceRow-ogPieceRow)==1  and (pieceCol==ogPieceCol):
-            validMove=True
-        elif (pieceRow-ogPieceRow)==-1  and (pieceCol==ogPieceCol):
-            validMove=True
-        elif (pieceRow==ogPieceRow) and (pieceCol-ogPieceCol)==1:
-            validMove=True
-        elif (pieceRow==ogPieceRow) and (pieceCol-ogPieceCol)==-1:
-            validMove=True
-        elif (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==1:
-            validMove=True
-        elif (pieceRow-ogPieceRow)==-1 and (pieceCol-ogPieceCol)==-1:
-            validMove=True
-        elif (pieceRow-ogPieceRow)==-1 and (pieceCol-ogPieceCol)==1:
-            validMove=True
-        elif (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==-1:
-            validMove=True
-        if validMove:
-            validCol=True
-            validRow=True
-        return validCol,validRow
-
-def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
-    #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece 
-    for i,rect in enumerate(rectsToBlit):
-        if rect == piece_rect:
-            ogPieceRow=int(ogPieceRow)
-            ogPieceCol=int(ogPieceCol)
-            if rect in allRooks:
-                validCol,validRow=rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-                return validCol,validRow
-            if rect in allQueens:
-                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-                return validCol,validRow
-            if rect in allBishops:
-                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-                return validCol,validRow
-            if rect in allPawns:
-                validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
-                return validCol,validRow
-            if rect in allKnights:
-                validCol,validRow=knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-                return validCol,validRow
-            if rect in allKings:
-                validCol,validRow=kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
-                return validCol,validRow
 
