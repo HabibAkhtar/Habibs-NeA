@@ -106,6 +106,7 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     if piece_rect in allRooks:
         if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
         #The rook can move anywhere along the row its on , or anywhere along the column its on
+        #The conditions below make sure the rook cant jump over other pieces 
             if pieceRow!= ogPieceRow:
                 #Piece is moving up or down 
                 if pieceRow>ogPieceRow:
@@ -117,6 +118,17 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
                     #Piece is moving up
                     for x in range (pieceRow+1,ogPieceRow):
                         if chessBoard[x][pieceCol]!= ' ':
+                            validMove=False
+            elif pieceCol != ogPieceCol:
+                #Piece is moving sideways 
+                if pieceCol>ogPieceCol:
+                    #Piece is moving right
+                    for y in range (pieceCol-1,ogPieceCol,-1):
+                        if chessBoard[pieceRow][y] !=' ':
+                            validMove=False
+                elif ogPieceCol>pieceCol:
+                    for z in range (pieceCol+1,ogPieceCol):
+                        if chessBoard[pieceRow][z] != ' ':
                             validMove=False
 
 
