@@ -77,17 +77,25 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
             if pieceRow>ogPieceRow and pieceCol>ogPieceCol:
                 #Piece is moving down and to the right
-                for d in range (pieceRow-1,ogPieceRow,-1):
-                    for f in range (pieceCol-1,ogPieceCol,-1):
+                for d in range (pieceRow-1,ogPieceRow+1,-1):
+                    for f in range (pieceCol-1,ogPieceCol+1,-1):
                         if chessBoard[d][f]!=' ':
                             validMove=False
-                            
+
             elif pieceRow<ogPieceRow and pieceCol>ogPieceCol:
                 #Piece is moving up and to the right 
                 for z in range (pieceRow+1,ogPieceRow):
                     for u in range (pieceCol-1,ogPieceCol,-1):
                         if chessBoard[z][u]!=' ':
                             validMove=False
+            elif pieceRow>ogPieceRow and pieceCol<ogPieceCol:
+                #Piece is moving down and to the left
+                for h in range(pieceRow-1,ogPieceRow,-1):
+                    #The letters has
+                    for a in range (pieceCol+1,ogPieceCol,-1):
+                        if chessBoard[h][a]!=' ':
+                            validMove=False
+
 
             if validMove:
                 validCol=True
