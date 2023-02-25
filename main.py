@@ -3,6 +3,16 @@ from chess.chessboard import *
 from chess.computerRepresentation import *
 from chess.loadImages import *
 from chess.handlingEvents import *
+#BUGS IN THE CODE 
+# Bottom row isnt registering in the 2D array 
+# When you click on a piece and dont drag it , it crashes the code 
+#Make sure pieces cant kill its own colour 
+#code check and checkmate 
+#Code in turns 
+#THEN UR DONE AND CAN MOVE ONTO ADDITIONAL OBJECTIVES
+#undo/redo function 
+#saving a game with a file 
+
 
 
 pygame.init()

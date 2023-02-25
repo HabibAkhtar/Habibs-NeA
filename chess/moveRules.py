@@ -1,6 +1,7 @@
 from .loadImages import *
 from .computerRepresentation import *
 
+
 def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
@@ -9,14 +10,13 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-            
+
         if validMove:
             validCol=True
             validRow=True
         return validCol,validRow
 
 
-        
 def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
@@ -28,8 +28,6 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validCol=True
             validRow=True
         return validCol,validRow
-
-
 
 
 def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
