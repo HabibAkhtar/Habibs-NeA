@@ -224,14 +224,14 @@ def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
                     #If there is then the move is illegal 
                     if chessBoard[i][pieceCol] != ' ':
                         validMove= False
-        elif ogPieceRow>pieceRow:
-            #Piece is moving up
-            #This makes sure that the piece cant jump over any pieces above it 
-            for x in range (pieceRow+1,ogPieceRow):
-                #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                #If there is then the move is illegal 
-                if chessBoard[x][pieceCol]!= ' ':
-                    validMove=False
+            elif ogPieceRow>pieceRow:
+                #Piece is moving up
+                #This makes sure that the piece cant jump over any pieces above it 
+                for x in range (pieceRow+1,ogPieceRow):
+                    #Checks if there is any pieces in between where the piece was and where it is trying to move ,
+                    #If there is then the move is illegal 
+                    if chessBoard[x][pieceCol]!= ' ':
+                        validMove=False
         elif pieceCol != ogPieceCol:
             #Piece is moving sideways 
             if pieceCol>ogPieceCol:

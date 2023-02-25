@@ -14,7 +14,6 @@ from chess.handlingEvents import *
 #saving a game with a file 
 
 
-
 pygame.init()
 pygame.mixer.init()
 Running=True
