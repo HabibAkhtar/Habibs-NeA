@@ -5,8 +5,12 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
     if piece_rect in allQueens:
-        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol) or pieceRow== ogPieceRow or pieceCol== ogPieceCol:
+        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
+            validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
             
+        if validMove:
             validCol=True
             validRow=True
         return validCol,validRow
@@ -16,54 +20,13 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
 def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
-    validMove=True
+    
     if piece_rect in allRooks:
-        if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
-        #The rook can move anywhere along the row its on , or anywhere along the column its on
-        #The conditions below make sure the rook cant jump over other pieces 
-            if pieceRow!= ogPieceRow:
-                #Piece is moving up or down 
-                if pieceRow>ogPieceRow:
-                    #Piece is moving down
-                    #This makes sure that the piece cant jump over any pieces below it 
-                    for i in range (pieceRow-1,ogPieceRow,-1):
-                        #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                        #If there is then the move is illegal 
-                        if chessBoard[i][pieceCol] != ' ':
-                            validMove= False
-                elif ogPieceRow>pieceRow:
-                    #Piece is moving up
-                    #This makes sure that the piece cant jump over any pieces above it 
-                    for x in range (pieceRow+1,ogPieceRow):
-                        #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                        #If there is then the move is illegal 
-                        if chessBoard[x][pieceCol]!= ' ':
-                            validMove=False
-            elif pieceCol != ogPieceCol:
-                #Piece is moving sideways 
-                if pieceCol>ogPieceCol:
-                    #Piece is moving right
-                    #This code makes sure that the piece cant jump over any pieces to the right of it 
-                    for y in range (pieceCol-1,ogPieceCol,-1):
-                        #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                        #If there is then the move is illegal 
-                        if chessBoard[pieceRow][y] !=' ':
-                            validMove=False
-                elif ogPieceCol>pieceCol:
-                    #Piece is moving left 
-                    #This code makes sure that the piece cant jump over any pieces to the left of it 
-                    for z in range (pieceCol+1,ogPieceCol):
-                        #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                        #If there is then the move is illegal 
-                        if chessBoard[pieceRow][z] != ' ':
-                            validMove=False
-
-
-            
-            if validMove and chessBoard[pieceRow][pieceCol][0]!=chessBoard[ogPieceRow][ogPieceCol][0]:
+        validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        if validMove and chessBoard[pieceRow][pieceCol][0]!=chessBoard[ogPieceRow][ogPieceCol][0]:
                 #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
-                validCol=True
-                validRow=True
+            validCol=True
+            validRow=True
         return validCol,validRow
 
 
@@ -72,48 +35,9 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
 def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
-    validMove=True
     if piece_rect in allBishops:
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-
-            rowDifference = pieceRow - ogPieceRow
-            colDifference = pieceCol - ogPieceCol
-
-            rowDirection= 1 if rowDifference > 0 else -1
-            #Row direction is 1 if piece is moving down and -1 if it is going up 
-            colDirection = 1 if colDifference > 0 else -1
-            #Col direction is 1 if piece is moving right and -1 if it is going left 
-
-            row, col = ogPieceRow + rowDirection, ogPieceCol+ colDirection
-            while (row, col) != (pieceRow,pieceCol):
-                if chessBoard[row][col]!=' ':
-                    validMove=False
-            
-                row += rowDirection
-                col += colDirection
-            '''
-            if pieceRow>ogPieceRow and pieceCol>ogPieceCol:
-                #Piece is moving down and to the right
-                for p in range (ogPieceRow+1,pieceRow):
-                    for w in range (ogPieceCol+1,pieceCol):
-                        if chessBoard[p][w] != ' ':
-                            validMove=False
-                    
-           
-
-            elif pieceRow<ogPieceRow and pieceCol>ogPieceCol:
-                #Piece is moving up and to the right 
-                for z in range (pieceRow+1,ogPieceRow):
-                    for u in range (pieceCol-1,ogPieceCol,-1):
-                        if chessBoard[z][u]!=' ':
-                            validMove=False
-            elif pieceRow>ogPieceRow and pieceCol<ogPieceCol:
-                #Piece is moving down and to the left
-                for h in range(pieceRow-1,ogPieceRow,-1):
-                    for a in range (pieceCol+1,ogPieceCol):
-                        if chessBoard[h][a]!=' ':
-                            validMove=False
-            '''
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
 
             if validMove:
                 validCol=True
@@ -266,4 +190,66 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
             if rect in allKings:
                 validCol,validRow=kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
+        
 
+def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
+    validMove=True
+    rowDifference = pieceRow - ogPieceRow
+    colDifference = pieceCol - ogPieceCol
+
+    rowDirection= 1 if rowDifference > 0 else -1
+    #Row direction is 1 if piece is moving down and -1 if it is going up 
+    colDirection = 1 if colDifference > 0 else -1
+    #Col direction is 1 if piece is moving right and -1 if it is going left 
+
+    row, col = ogPieceRow + rowDirection, ogPieceCol+ colDirection
+    while (row, col) != (pieceRow,pieceCol):
+        if chessBoard[row][col]!=' ':
+            validMove=False
+
+        row += rowDirection
+        col += colDirection
+    return validMove
+
+def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
+    validMove=True
+    if pieceRow == ogPieceRow or pieceCol== ogPieceCol:
+        #The rook can move anywhere along the row its on , or anywhere along the column its on
+        #The conditions below make sure the rook cant jump over other pieces 
+        if pieceRow!= ogPieceRow:
+            #Piece is moving up or down 
+            if pieceRow>ogPieceRow:
+                #Piece is moving down
+                #This makes sure that the piece cant jump over any pieces below it 
+                for i in range (pieceRow-1,ogPieceRow,-1):
+                    #Checks if there is any pieces in between where the piece was and where it is trying to move ,
+                    #If there is then the move is illegal 
+                    if chessBoard[i][pieceCol] != ' ':
+                        validMove= False
+        elif ogPieceRow>pieceRow:
+            #Piece is moving up
+            #This makes sure that the piece cant jump over any pieces above it 
+            for x in range (pieceRow+1,ogPieceRow):
+                #Checks if there is any pieces in between where the piece was and where it is trying to move ,
+                #If there is then the move is illegal 
+                if chessBoard[x][pieceCol]!= ' ':
+                    validMove=False
+        elif pieceCol != ogPieceCol:
+            #Piece is moving sideways 
+            if pieceCol>ogPieceCol:
+                #Piece is moving right
+                #This code makes sure that the piece cant jump over any pieces to the right of it 
+                for y in range (pieceCol-1,ogPieceCol,-1):
+                    #Checks if there is any pieces in between where the piece was and where it is trying to move ,
+                    #If there is then the move is illegal 
+                    if chessBoard[pieceRow][y] !=' ':
+                        validMove=False
+            elif ogPieceCol>pieceCol:
+                #Piece is moving left 
+                #This code makes sure that the piece cant jump over any pieces to the left of it 
+                for z in range (pieceCol+1,ogPieceCol):
+                    #Checks if there is any pieces in between where the piece was and where it is trying to move ,
+                     #If there is then the move is illegal 
+                    if chessBoard[pieceRow][z] != ' ':
+                        validMove=False
+    return validMove
