@@ -31,8 +31,8 @@ while Running:
 
         elif event.type == pygame.MOUSEBUTTONUP:
             dropPiece(pieceRep,piece_rect,startX,startY)
-            for row in chessBoard:
-                print(row)
+            #for row in chessBoard:
+            #   print(row)
 
 
    

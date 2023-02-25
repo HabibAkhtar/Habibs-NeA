@@ -75,7 +75,23 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validMove=True
     if piece_rect in allBishops:
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
+
+            rowDifference = pieceRow - ogPieceRow
+            colDifference = pieceCol - ogPieceCol
+
+            rowDirection= 1 if rowDifference > 0 else -1
+            #Row direction is 1 if piece is moving down and -1 if it is going up 
+            colDirection = 1 if colDifference > 0 else -1
+            #Col direction is 1 if piece is moving right and -1 if it is going left 
+
+            row, col = ogPieceRow + rowDirection, ogPieceCol+ colDirection
+            while (row, col) != (pieceRow,pieceCol):
+                if chessBoard[row][col]!=' ':
+                    validMove=False
             
+                row += rowDirection
+                col += colDirection
+            '''
             if pieceRow>ogPieceRow and pieceCol>ogPieceCol:
                 #Piece is moving down and to the right
                 for p in range (ogPieceRow+1,pieceRow):
@@ -94,11 +110,10 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             elif pieceRow>ogPieceRow and pieceCol<ogPieceCol:
                 #Piece is moving down and to the left
                 for h in range(pieceRow-1,ogPieceRow,-1):
-                    
-                    for a in range (pieceCol+1,ogPieceCol,-1):
+                    for a in range (pieceCol+1,ogPieceCol):
                         if chessBoard[h][a]!=' ':
                             validMove=False
-
+            '''
 
             if validMove:
                 validCol=True
