@@ -2,12 +2,13 @@ from .loadImages import *
 from .computerRepresentation import *
 
 
-def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement):
     validCol=False
     validRow=False
+    validMove=False
     if piece_rect in allQueens:
         if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement)
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
 
@@ -30,12 +31,12 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         return validCol,validRow
 
 
-def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement):
     validCol=False
     validRow=False
     if piece_rect in allBishops:
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement)
 
             if validMove:
                 validCol=True
@@ -164,7 +165,7 @@ def kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validRow=True
         return validCol,validRow
 
-def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
+def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation,movement):
     #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece 
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
@@ -174,10 +175,10 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 validCol,validRow=rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allQueens:
-                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement)
                 return validCol,validRow
             if rect in allBishops:
-                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
+                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement)
                 return validCol,validRow
             if rect in allPawns:
                 validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
@@ -190,8 +191,9 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 return validCol,validRow
         
 
-def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
+def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement):
     validMove=True
+    
     rowDifference = pieceRow - ogPieceRow
     colDifference = pieceCol - ogPieceCol
 
@@ -202,8 +204,15 @@ def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
 
     row, col = ogPieceRow + rowDirection, ogPieceCol+ colDirection
     while (row, col) != (pieceRow,pieceCol):
-        if chessBoard[row][col]!=' ':
-            validMove=False
+        if ogPieceRow != pieceRow and pieceCol != ogPieceCol:
+
+            if chessBoard[row][col]!=' ':
+                validMove=False
+        else:
+            validMove=True
+        return validMove
+    
+               
 
         row += rowDirection
         col += colDirection
