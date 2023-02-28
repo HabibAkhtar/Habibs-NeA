@@ -2,17 +2,18 @@ from .loadImages import *
 from .computerRepresentation import *
 
 
-def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement):
+def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
     validMove=False
     if piece_rect in allQueens:
+        sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement)
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
 
-        if validMove:
+        if validMove and not sameColAsPiece:
             validCol=True
             validRow=True
         return validCol,validRow
@@ -23,22 +24,24 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validRow=False
     
     if piece_rect in allRooks:
+        sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-        if validMove and chessBoard[pieceRow][pieceCol][0]!=chessBoard[ogPieceRow][ogPieceCol][0]:
+        if validMove and not sameColAsPiece:
                 #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
             validCol=True
             validRow=True
         return validCol,validRow
 
 
-def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement):
+def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validCol=False
     validRow=False
     if piece_rect in allBishops:
+        sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
-            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement)
+            validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
 
-            if validMove:
+            if validMove and not sameColAsPiece:
                 validCol=True
                 validRow=True
         return validCol,validRow
@@ -133,7 +136,8 @@ def knightValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         validMove=True
 
     if piece_rect in allKnights:
-        if validMove:
+        sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        if validMove and not sameColAsPiece:
             validCol=True
             validRow=True
         return validCol,validRow
@@ -144,6 +148,7 @@ def kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     validRow=False
     validMove=False
     if piece_rect in allKings:
+        sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow)==1  and (pieceCol==ogPieceCol):
             validMove=True
         elif (pieceRow-ogPieceRow)==-1  and (pieceCol==ogPieceCol):
@@ -160,13 +165,14 @@ def kingValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validMove=True
         elif (pieceRow-ogPieceRow)==1 and (pieceCol-ogPieceCol)==-1:
             validMove=True
-        if validMove:
+        if validMove and not sameColAsPiece:
             validCol=True
             validRow=True
         return validCol,validRow
 
-def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation,movement):
-    #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece 
+def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation):
+    #This sub routine checks what piece is trying to be moved and calls the correct sub routine based on the piece
+
     for i,rect in enumerate(rectsToBlit):
         if rect == piece_rect:
             ogPieceRow=int(ogPieceRow)
@@ -175,10 +181,10 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 validCol,validRow=rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allQueens:
-                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement)
+                validCol,validRow=queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allBishops:
-                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,movement)
+                validCol,validRow=bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect)
                 return validCol,validRow
             if rect in allPawns:
                 validCol,validRow=pawnValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
@@ -191,7 +197,7 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
                 return validCol,validRow
         
 
-def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow,movement):
+def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
     validMove=True
     
     rowDifference = pieceRow - ogPieceRow
@@ -260,3 +266,9 @@ def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
                     if chessBoard[pieceRow][z] != ' ':
                         validMove=False
     return validMove
+
+def sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
+    sameColAsPiece=True
+    if chessBoard[pieceRow][pieceCol][0] != chessBoard[ogPieceRow][ogPieceCol][0]:
+        sameColAsPiece=False
+    return sameColAsPiece

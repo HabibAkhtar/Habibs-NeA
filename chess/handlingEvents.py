@@ -4,8 +4,8 @@ from .loadImages import *
 from .computerRepresentation import *
 from .moveRules import *
 #Due to a pygame bug this array below is used as a boolean variable , the first index represents a true/false variable 
-#If the first index is 1 that represents true whereas if it 0 that represents false 
-movement=[0,0]
+#If the first index is 1 that represents true whereas if it 0 that represents false
+movement=[0]
 
 
 def clickPiece(piece_rect):
@@ -24,12 +24,9 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         pieceRow=newY//squareSize
         pieceRow=int(pieceRow)
         pieceCol=int(pieceCol)
-        if ogPieceCol == pieceCol and ogPieceRow == pieceRow:
-             #Piece is being clicked not dragged
-             movement[1]=1
         #This subroutine below will see what piece is being selected and then call the correct subroutine
         #This is to check if the move that is trying to be made is valid or not 
-        validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation,movement)
+        validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
         if not validRow or not validCol:
             invalidMoveSound=pygame.mixer.Sound("./Pieces/invalidMove.wav")
             invalidMoveSound.set_volume(0.2)
@@ -42,7 +39,7 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
             piece_rect.x=squareSize*pieceCol
             #Pinning the piece to a square
 
-            updateCompRep(pieceRow,pieceCol,piecerepresentation)
+            updateCompRep(pieceRow,pieceCol,ogPieceRow,ogPieceCol,piecerepresentation)
 
 
         movement[0]=0
@@ -50,34 +47,22 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
             
         
         
-def updateCompRep(pieceRow,pieceCol,piecerepresentation):
-    pieceCounter=0
-    holder=' '
+def updateCompRep(pieceRow,pieceCol,ogPieceRow,ogPieceCol,piecerepresentation):
     if chessBoard[pieceRow][pieceCol] != ' ' and chessBoard[pieceRow][pieceCol] != piecerepresentation:
-        #These conditions above are checking if there is a piece where the moving piece is trying to move to
+        #These conditions above are checking if there is a piece where the moving piece is trying to move to    
             for i,piece in enumerate(compRepOfPieces):
-        #These lines of code is repsonsible for killing the pieces if the pieces are taken 
+        #These lines of code is repsonsible for killing the pieces if the pieces are taken
+            
                 if piece == chessBoard[pieceRow][pieceCol]:
                     piecesToBlit.pop(i)
                     rectsToBlit.pop(i)
                     compRepOfPieces.pop(i)
+    chessBoard[ogPieceRow][ogPieceCol]= ' '
+    chessBoard[pieceRow][pieceCol]= piecerepresentation    
 
-    for i,sublist in enumerate(chessBoard):
-        #The enumerate function adds an index value for every item in the list
-            if piecerepresentation in sublist:
-                chessBoard[i][sublist.index(piecerepresentation)]=' '
-
-            chessBoard[pieceRow][pieceCol]=piecerepresentation
-            for x in sublist:
-                # without the 2 if statements below , if a piece is moved left in the same row , the computer will register the piece twice 
-                if x == piecerepresentation:
-                    chessBoard[i][sublist.index(piecerepresentation)]=holder
-                    pieceCounter+=1
-                if pieceCounter > 1:
-                    holder = ' '
-
-                 
+          
                 
+#The code below is responsible for turn taking in the game 
         
 
 

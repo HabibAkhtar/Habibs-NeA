@@ -4,15 +4,13 @@ from chess.computerRepresentation import *
 from chess.loadImages import *
 from chess.handlingEvents import *
 #BUGS IN THE CODE 
-# Bottom row isnt registering in the 2D array 
-#Make sure pieces cant kill its own colour 
 
 #code check and checkmate 
 #Code in turns 
 #THEN UR DONE AND CAN MOVE ONTO ADDITIONAL OBJECTIVES
-#undo/redo function 
+#undo/redo function
+#Add a timer 
 #saving a game with a file 
-
 
 pygame.init()
 pygame.mixer.init()
