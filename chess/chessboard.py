@@ -11,8 +11,8 @@ def createChessboard(windowWidth, windowHeight, surface):
     x = 0
     y = 0
     color = None
-    colour1=(205,133,63)
-    colour2=(245,245,220)
+    colour1=(211,211,211)
+    colour2=(255,255,255)
 
     def createHorizontalRects(x, y, color, color2):
         for i in range(8):

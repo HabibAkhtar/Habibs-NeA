@@ -5,11 +5,12 @@ from chess.loadImages import *
 from chess.handlingEvents import *
 #BUGS IN THE CODE 
 
-#code check and checkmate 
+#code check and checkmate
+
 #Code in turns 
 #THEN UR DONE AND CAN MOVE ONTO ADDITIONAL OBJECTIVES
 #undo/redo function
-#Add a timer 
+#Add a timer
 #saving a game with a file 
 
 pygame.init()
@@ -38,8 +39,11 @@ while Running:
 
         elif event.type == pygame.MOUSEBUTTONUP:
             dropPiece(pieceRep,piece_rect,startX,startY)
-            for row in chessBoard:
-               print(row)
+            #for row in chessBoard:
+            #   print(row)
+            
+
+
 
 
    

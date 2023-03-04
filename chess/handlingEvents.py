@@ -13,6 +13,7 @@ def clickPiece(piece_rect):
     if piece_rect.collidepoint(startX,startY):
         movement[0]=1
         
+        
     return startX,startY
         
 def dropPiece(piecerepresentation,piece_rect,startX,startY):
@@ -27,7 +28,7 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
         #This subroutine below will see what piece is being selected and then call the correct subroutine
         #This is to check if the move that is trying to be made is valid or not 
         validCol,validRow=moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepresentation)
-        if not validRow or not validCol:
+        if not validRow or not validCol :
             invalidMoveSound=pygame.mixer.Sound("./Pieces/invalidMove.wav")
             invalidMoveSound.set_volume(0.2)
             invalidMoveSound.play()
@@ -40,6 +41,7 @@ def dropPiece(piecerepresentation,piece_rect,startX,startY):
             #Pinning the piece to a square
 
             updateCompRep(pieceRow,pieceCol,ogPieceRow,ogPieceCol,piecerepresentation)
+        
 
 
         movement[0]=0

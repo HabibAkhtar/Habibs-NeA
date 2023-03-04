@@ -5,6 +5,7 @@ from pygame.locals import *
 pygame.init()
 WIDTH = HEIGHT = 600
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('Chess')
 
 rookB1=pygame.image.load("./Pieces/black rook.png").convert_alpha()
 rookB1=pygame.transform.scale(rookB1,(80,80))

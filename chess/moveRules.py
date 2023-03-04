@@ -12,10 +12,14 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        
 
         if validMove and not sameColAsPiece:
+   
             validCol=True
             validRow=True
+
+    
         return validCol,validRow
 
 
@@ -30,10 +34,12 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
                 #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
             validCol=True
             validRow=True
+            
         return validCol,validRow
 
 
 def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    possiblemoves=[]
     validCol=False
     validRow=False
     if piece_rect in allBishops:
@@ -44,6 +50,7 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
             if validMove and not sameColAsPiece:
                 validCol=True
                 validRow=True
+                
         return validCol,validRow
 
 
@@ -199,9 +206,11 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
 
 def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
     validMove=True
+
     
     rowDifference = pieceRow - ogPieceRow
     colDifference = pieceCol - ogPieceCol
+    
 
     rowDirection= 1 if rowDifference > 0 else -1
     #Row direction is 1 if piece is moving down and -1 if it is going up 
@@ -214,14 +223,14 @@ def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
 
             if chessBoard[row][col]!=' ':
                 validMove=False
+
+
         else:
             validMove=True
-        return validMove
-    
-               
 
-        row += rowDirection
-        col += colDirection
+
+        return validMove
+            
     return validMove
 
 def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
@@ -230,13 +239,14 @@ def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
         #The rook can move anywhere along the row its on , or anywhere along the column its on
         #The conditions below make sure the rook cant jump over other pieces 
         if pieceRow!= ogPieceRow:
-            #Piece is moving up or down 
+            #Piece is moving up or down
+
             if pieceRow>ogPieceRow:
                 #Piece is moving down
                 #This makes sure that the piece cant jump over any pieces below it 
                 for i in range (pieceRow-1,ogPieceRow,-1):
                     #Checks if there is any pieces in between where the piece was and where it is trying to move ,
-                    #If there is then the move is illegal 
+                    #If there is then the move is illegal
                     if chessBoard[i][pieceCol] != ' ':
                         validMove= False
             elif ogPieceRow>pieceRow:
@@ -272,3 +282,13 @@ def sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
     if chessBoard[pieceRow][pieceCol][0] != chessBoard[ogPieceRow][ogPieceCol][0]:
         sameColAsPiece=False
     return sameColAsPiece
+
+
+#Make an allPossibleMoves function where you go through every square and check if it is a valid row and col for ANY piece(if it returns validrow and validcol)
+#Add the row and col to a list as a tuple 
+#Check if the tuple is in the kings position 
+#If it is then check is true 
+#if check is true:
+#calculate all of the possible moves for the king , if all possible moves are in the possible moves list then Checkmate is true
+
+
