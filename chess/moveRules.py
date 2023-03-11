@@ -48,8 +48,10 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+            allPossibleBishopMoves((pieceRow,pieceCol))
             
-            isCheck(pieceRow,pieceCol,piece_rect)
+            
+            #isCheck(pieceRow,pieceCol,piece_rect)
             
 
             if validMove and not sameColAsPiece:
@@ -330,21 +332,46 @@ def isCheck(pieceRow,pieceCol,piece_rect):
                 squares.append((row, col))
                 col += directionOfCol
                 row += directionOfRow
-                for i in squares:
-                    y=i[0]
-                    x=i[1]
-                    if chessBoard[y][x]==' ':
-                        check=True
-                    else:
-                        check=False
+
             if len(squares)==0:
                 check=True
             print(squares)
             print(check)
 
 
-#If the king is in check , then if the player tries to move a piece that isnt the king (to block the check).
-#This means that the move the player is attempting to make must be in the path between the piece that is putting the king in check and 
-# the king  
 
+
+    
+def allPossibleBishopMoves(pos):
+    moves = []
+    check=False
+
+    row, col = pos
+
+    # Iterate over all possible diagonal directions
+    for directionOfRow, directionOfCol in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
+        #This is all the possible directions of movement from the bishop
+        #-1 means the piece is decreasing in col(moving left) or decreasing row(moving down )
+        #1 means the piece is increasing in col (moving right) or increasing row (moving up)
+        r, c = row + directionOfRow, col + directionOfCol
+        while 0 <= r < 8 and 0 <= c < 8:
+            moves.append((r, c))
+            if chessBoard[r][c]!=' ': 
+                break
+            r += directionOfRow
+            c += directionOfCol
+    for i in moves:
+        w=i[0]
+        q=i[1]
+    
+        if chessBoard[w][q]=='bK':
+            check=True
+    #print(moves)
+    print(check)
+            
+
+#This is the plan .
+# Create a function which gets every possible move for the piece that has just been moved .
+#if the king is in the possible moves , then it is in check 
+#If all of the kings possible moves are in the other pieces posssible moves , then checkmate is true 
     
