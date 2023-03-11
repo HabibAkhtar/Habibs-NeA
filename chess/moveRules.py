@@ -3,13 +3,15 @@ from .computerRepresentation import *
 
 
 def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
+    
     validCol=False
     validRow=False
     validMove=False
     if piece_rect in allQueens:
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
+        if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):                
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         
@@ -39,13 +41,16 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
 
 
 def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
-    possiblemoves=[]
+    
     validCol=False
     validRow=False
     if piece_rect in allBishops:
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+            
+            isCheck(pieceRow,pieceCol,piece_rect)
+            
 
             if validMove and not sameColAsPiece:
                 validCol=True
@@ -206,8 +211,8 @@ def moveValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect,piecerepre
 
 def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
     validMove=True
-
     
+
     rowDifference = pieceRow - ogPieceRow
     colDifference = pieceCol - ogPieceCol
     
@@ -223,10 +228,13 @@ def BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
 
             if chessBoard[row][col]!=' ':
                 validMove=False
-
-
+            
         else:
             validMove=True
+        
+    
+        
+        
 
 
         return validMove
@@ -249,6 +257,7 @@ def rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
                     #If there is then the move is illegal
                     if chessBoard[i][pieceCol] != ' ':
                         validMove= False
+                        
             elif ogPieceRow>pieceRow:
                 #Piece is moving up
                 #This makes sure that the piece cant jump over any pieces above it 
@@ -291,4 +300,51 @@ def sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow):
 #if check is true:
 #calculate all of the possible moves for the king , if all possible moves are in the possible moves list then Checkmate is true
 
+def findIndex(array, item):
+    for i in range(len(array)):
+        for j in range(len(array[i])):
+            if array[i][j] == item:
+                return i, j
+    return None
 
+
+def isCheck(pieceRow,pieceCol,piece_rect):
+
+    check=False
+    squares = []
+    if piece_rect in allBishops or allQueens:
+        if chessBoard[pieceRow][pieceCol][0]=='b':
+            kingRow,kingCol=findIndex(chessBoard,'wk')
+        else:
+            kingRow,kingCol=findIndex(chessBoard,'bK')
+        if(kingRow-pieceRow) == (kingCol- pieceCol) or (kingRow-pieceRow)==(pieceCol-kingCol):
+            
+            # Determines the direction of the bishop's movement
+            directionOfCol = 1 if kingCol > pieceCol else -1
+            #If the piece is moving to the right then directionOfCol will be 1 .If the piece is moving left , directionOfCol will be -1
+            directionOfRow = 1 if kingRow > pieceRow else -1
+            #If the piece is moving up then directionOfRow will be 1 .If the piece is moving down , directionOfRow will be -1
+
+            col, row = pieceCol + directionOfCol, pieceRow + directionOfRow
+            while col != kingCol and row != kingRow:
+                squares.append((row, col))
+                col += directionOfCol
+                row += directionOfRow
+                for i in squares:
+                    y=i[0]
+                    x=i[1]
+                    if chessBoard[y][x]==' ':
+                        check=True
+                    else:
+                        check=False
+            if len(squares)==0:
+                check=True
+            print(squares)
+            print(check)
+
+
+#If the king is in check , then if the player tries to move a piece that isnt the king (to block the check).
+#This means that the move the player is attempting to make must be in the path between the piece that is putting the king in check and 
+# the king  
+
+    
