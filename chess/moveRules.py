@@ -11,9 +11,12 @@ def queenValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol- ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):                
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-
         elif pieceRow == ogPieceRow or pieceCol== ogPieceCol:
             validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        bishopMoves=allPossibleBishopMoves((pieceRow,pieceCol))
+        rookMoves=allPossibleRookMoves((pieceRow,pieceCol))
+        QueenMoves=bishopMoves+rookMoves
+        print(QueenMoves)
         
 
         if validMove and not sameColAsPiece:
@@ -32,8 +35,8 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     if piece_rect in allRooks:
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-        moves=allPossibleRookMoves((pieceRow,pieceCol))
-        print(moves)
+        rookMoves=allPossibleRookMoves((pieceRow,pieceCol))
+        print(rookMoves)
         if validMove and not sameColAsPiece:
                 #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
             validCol=True
@@ -50,10 +53,11 @@ def bishopValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         if (pieceRow-ogPieceRow) == (pieceCol-ogPieceCol) or (pieceRow-ogPieceRow)==(ogPieceCol-pieceCol):
             validMove=BishopJump(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
-            allPossibleBishopMoves((pieceRow,pieceCol))
+            bishopMoves=allPossibleBishopMoves((pieceRow,pieceCol))
+            print(bishopMoves)
             
             
-            #isCheck(pieceRow,pieceCol,piece_rect)
+            
             
 
             if validMove and not sameColAsPiece:
@@ -345,7 +349,7 @@ def isCheck(pieceRow,pieceCol,piece_rect):
 
     
 def allPossibleBishopMoves(pos):
-    moves = []
+    bishopMoves = []
     check=False
 
     row, col = pos
@@ -357,19 +361,20 @@ def allPossibleBishopMoves(pos):
         #1 means the piece is increasing in col (moving right) or increasing row (moving up)
         r, c = row + directionOfRow, col + directionOfCol
         while 0 <= r < 8 and 0 <= c < 8:
-            moves.append((r, c))
+            bishopMoves.append((r, c))
             if chessBoard[r][c]!=' ': 
                 break
             r += directionOfRow
             c += directionOfCol
-    for i in moves:
+    for i in bishopMoves:
         y=i[0]
         x=i[1]
     
         if chessBoard[y][x]=='bK':
             check=True
-    #print(moves)
+    
     print(check)
+    return bishopMoves
 
 
 def allPossibleRookMoves(pos):
@@ -377,38 +382,38 @@ def allPossibleRookMoves(pos):
     check=False
 
     # create an empty list to store the valid moves
-    moves = []
+    rookMoves = []
 
     # calculate all the valid moves along the row
     for c in range(col+1, 8):
         if chessBoard[row][c] == ' ':
-            moves.append((row, c))
+            rookMoves.append((row, c))
         else:
-            moves.append((row, c))
+            rookMoves.append((row, c))
             break
 
     for c in range(col-1, -1, -1):
         if chessBoard[row][c] == ' ':
-            moves.append((row, c))
+            rookMoves.append((row, c))
         else:
-            moves.append((row, c))
+            rookMoves.append((row, c))
             break
 
     # calculate all the valid moves along the column
     for r in range(row+1, 8):
         if chessBoard[r][col] == ' ':
-            moves.append((r, col))
+            rookMoves.append((r, col))
         else:
-            moves.append((r, col))
+            rookMoves.append((r, col))
             break
 
     for r in range(row-1, -1, -1):
         if chessBoard[r][col] == ' ':
-            moves.append((r, col))
+            rookMoves.append((r, col))
         else:
-            moves.append((r, col))
+            rookMoves.append((r, col))
             break
-    for i in moves:
+    for i in rookMoves:
         y=i[0]
         x=i[1]
     
@@ -418,7 +423,7 @@ def allPossibleRookMoves(pos):
     print(check)
     
 
-    return moves
+    return rookMoves
 
 #This is the plan .
 # Create a function which gets every possible move for the piece that has just been moved .
