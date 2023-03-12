@@ -32,6 +32,8 @@ def rookValidation(pieceCol,ogPieceCol,pieceRow,ogPieceRow,piece_rect):
     if piece_rect in allRooks:
         sameColAsPiece=sameColour(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
         validMove=rookJumps(pieceCol,ogPieceCol,pieceRow,ogPieceRow)
+        moves=allPossibleRookMoves((pieceRow,pieceCol))
+        print(moves)
         if validMove and not sameColAsPiece:
                 #This condition checks if the move has been deemed valid and the piece is not taking a piece of its own colour
             validCol=True
@@ -361,14 +363,62 @@ def allPossibleBishopMoves(pos):
             r += directionOfRow
             c += directionOfCol
     for i in moves:
-        w=i[0]
-        q=i[1]
+        y=i[0]
+        x=i[1]
     
-        if chessBoard[w][q]=='bK':
+        if chessBoard[y][x]=='bK':
             check=True
     #print(moves)
     print(check)
-            
+
+
+def allPossibleRookMoves(pos):
+    row, col = pos
+    check=False
+
+    # create an empty list to store the valid moves
+    moves = []
+
+    # calculate all the valid moves along the row
+    for c in range(col+1, 8):
+        if chessBoard[row][c] == ' ':
+            moves.append((row, c))
+        else:
+            moves.append((row, c))
+            break
+
+    for c in range(col-1, -1, -1):
+        if chessBoard[row][c] == ' ':
+            moves.append((row, c))
+        else:
+            moves.append((row, c))
+            break
+
+    # calculate all the valid moves along the column
+    for r in range(row+1, 8):
+        if chessBoard[r][col] == ' ':
+            moves.append((r, col))
+        else:
+            moves.append((r, col))
+            break
+
+    for r in range(row-1, -1, -1):
+        if chessBoard[r][col] == ' ':
+            moves.append((r, col))
+        else:
+            moves.append((r, col))
+            break
+    for i in moves:
+        y=i[0]
+        x=i[1]
+    
+        if chessBoard[y][x]=='bK':
+            check=True
+    
+    print(check)
+    
+
+    return moves
 
 #This is the plan .
 # Create a function which gets every possible move for the piece that has just been moved .
